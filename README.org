@@ -1,0 +1,4 @@
+#+title: nix-flymake
+#+author: Taylor Viti
+
+A flymake backend for linting =nix= sources, implemented using ~nix-instantiate~.
