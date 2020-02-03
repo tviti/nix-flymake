@@ -36,19 +36,11 @@
     (goto-char (point-min))
     (cl-loop
      while (search-forward-regexp
-	    (rx line-start
-		;; type
-		(group-n 1 "error: ")
-		;; msg
-		(group-n 2 (one-or-more (not (any ":")))) ":"
-		;; row
-		(group-n 3 (one-or-more num)) ":"
-		;; col
-		(group-n 4 (one-or-more num)) line-end)
+	    "\\(error: \\)\\(.*?\\), at \\(.*?\\):\\([0-9]+\\):\\([0-9]+\\)"
 	    nil t)
      for msg = (match-string 2)
-     for (beg . end) = (let ((line (string-to-number (match-string 3)))
-			     (col (string-to-number (match-string 4))))
+     for (beg . end) = (let ((line (string-to-number (match-string 4)))
+			     (col (string-to-number (match-string 5))))
 			 (flymake-diag-region source line col))
      for type = :warning
      collect (flymake-make-diagnostic source beg end type msg)
